@@ -1,7 +1,7 @@
-export type LensEnabled = boolean
+export type VisualizerEnabled = boolean
 
 declare module 'claude-code' {
   interface PluginState {
-    'visualizer-mod': { enabled: LensEnabled }
+    'visualizer-mod': { enabled: VisualizerEnabled }
   }
 }

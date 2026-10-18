@@ -14,9 +14,9 @@ const REPLY = [
 
 const message = (text: string) => ({ text, isFirstOfReply: true })
 
-/** Runs `/lens <args>` as the person typing it does. */
-const lens = ($: Engine, args: string) =>
-  $.command.run({ command: 'lens', args, origin: { kind: 'composer' }, presentation: { isFullscreen: false, columns: 80 } })
+/** Runs `/visualize <args>` as the person typing it does. */
+const visualize = ($: Engine, args: string) =>
+  $.command.run({ command: 'visualize', args, origin: { kind: 'composer' }, presentation: { isFullscreen: false, columns: 80 } })
 
 /** Stands in for the engine's own drawing of a reply. */
 const engine = (on: On) =>
@@ -36,7 +36,7 @@ test('redraws mermaid and chains on the terminal, leaves desktop alone', async (
     viewport: { columns: 80, rows: 40 },
   })
   expect(await terminal.find({ type: 'Markdown', text: /Here is the flow/ })).toBeDefined()
-  expect(await terminal.find({ type: 'Text', text: /\/lens open [0-9a-f]{6}/ })).toBeDefined()
+  expect(await terminal.find({ type: 'Text', text: /\/visualize open [0-9a-f]{6}/ })).toBeDefined()
   expect(await terminal.find({ type: 'Text', text: /──▶/ })).toBeDefined()
   await terminal.unmount()
 
@@ -47,7 +47,7 @@ test('redraws mermaid and chains on the terminal, leaves desktop alone', async (
     props: message(REPLY),
     viewport: { columns: 80, rows: 40 },
   })
-  expect(await desktop.find({ type: 'Text', text: /\/lens open/ })).toBeUndefined()
+  expect(await desktop.find({ type: 'Text', text: /\/visualize open/ })).toBeUndefined()
   await desktop.unmount()
 })
 
@@ -65,10 +65,10 @@ test('leaves a plain reply to the engine', async ($, on) => {
   await ui.unmount()
 })
 
-test('/lens off draws replies as written, /lens on again', async ($, on) => {
+test('/visualize off draws replies as written, /visualize on again', async ($, on) => {
   mock.store(on)
   engine(on)
-  expect((await lens($, 'off')).text).toContain('off')
+  expect((await visualize($, 'off')).text).toContain('off')
   const ui = await $.ui.mount({
     plugin: 'visualizer-mod',
     surface: 'terminal',
@@ -76,13 +76,13 @@ test('/lens off draws replies as written, /lens on again', async ($, on) => {
     props: message(REPLY),
     viewport: { columns: 80, rows: 40 },
   })
-  expect(await ui.find({ type: 'Text', text: /\/lens open/ })).toBeUndefined()
-  expect((await lens($, 'on')).text).toContain('on')
-  expect(await ui.find({ type: 'Text', text: /\/lens open/ })).toBeDefined()
+  expect(await ui.find({ type: 'Text', text: /\/visualize open/ })).toBeUndefined()
+  expect((await visualize($, 'on')).text).toContain('on')
+  expect(await ui.find({ type: 'Text', text: /\/visualize open/ })).toBeDefined()
   await ui.unmount()
 })
 
-test('/lens open writes a page for the latest diagrams and opens it', async ($, on) => {
+test('/visualize open writes a page for the latest diagrams and opens it', async ($, on) => {
   mock.store(on)
   engine(on)
   const written: { path: string; text: string }[] = []
@@ -102,12 +102,12 @@ test('/lens open writes a page for the latest diagrams and opens it', async ($, 
     return { value: { exitCode: 0, stdout: '', stderr: '', isStdoutTruncated: false, isStderrTruncated: false } }
   })
 
-  const result = await lens($, 'open')
+  const result = await visualize($, 'open')
   expect(result.text).toContain('Opened diagram')
   expect(written).toHaveLength(1)
   expect(written[0]?.path).toMatch(/^\/tmp\/visualizer-mod\/[0-9a-f]{6}\.html$/)
   expect(written[0]?.text).toContain('A[Start] --&gt; B[End]')
   expect(ran[0]?.[0]).toBe('open')
 
-  expect((await lens($, 'open ffffff')).text).toContain('No mermaid diagram')
+  expect((await visualize($, 'open ffffff')).text).toContain('No mermaid diagram')
 })

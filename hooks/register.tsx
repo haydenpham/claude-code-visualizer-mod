@@ -20,7 +20,7 @@ type Drawn =
   | { kind: 'diagram'; id: string; lines?: string[]; source: string }
   | { kind: 'chain'; label?: string; isListed: boolean; lines: ArtLine[] }
 
-/** What lens draws for one part; markdown where the engine's own drawing is fine. */
+/** What visualize draws for one part; markdown where the engine's own drawing is fine. */
 function draw(part: Segment, width: number): Drawn {
   switch (part.kind) {
     case 'markdown':
@@ -71,7 +71,7 @@ export const register: Register = on => {
     const stored = await $.store.get('enabled')
     if (typeof stored === 'boolean') await update($, enabled, () => stored)
     await $.command.register({
-      name: 'lens',
+      name: 'visualize',
       description: 'Toggle readable tables/diagrams, or open a mermaid diagram in the browser',
       argumentHint: '[on|off|open [id]]',
       immediate: true,
@@ -80,7 +80,7 @@ export const register: Register = on => {
     return next(e)
   })
 
-  on('command.run', { command: 'lens' }, async ($, e) => {
+  on('command.run', { command: 'visualize' }, async ($, e) => {
     const [verb = '', arg] = e.args.trim().split(/\s+/)
     if (verb === 'open') return { text: await openDiagrams($, arg) }
 
@@ -88,7 +88,7 @@ export const register: Register = on => {
     await update($, enabled, () => isOn)
     await $.store.set('enabled', isOn)
 
-    return { text: isOn ? 'lens is on: wide tables, mermaid and arrow flows are redrawn.' : 'lens is off: replies draw as written.' }
+    return { text: isOn ? 'visualize is on: wide tables, mermaid and arrow flows are redrawn.' : 'visualize is off: replies draw as written.' }
   })
 
   on('ui.render', { component: 'AssistantMessage' }, async ($, e, next) => {
@@ -157,7 +157,7 @@ export const register: Register = on => {
           <Code source={part.source} language="mermaid" />
         )}
         <Text dimColor>
-          mermaid{part.lines ? '' : ' (too large to draw here)'} · /lens open {part.id} to view it rendered
+          mermaid{part.lines ? '' : ' (too large to draw here)'} · /visualize open {part.id} to view it rendered
         </Text>
       </Box>
     )

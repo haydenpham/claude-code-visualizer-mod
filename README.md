@@ -19,9 +19,9 @@ claude --plugin-dir ./claude-code-visualizer-mod
 
 | Command | Effect |
 |---|---|
-| `/lens` | Toggle redrawing on or off |
-| `/lens on` / `/lens off` | Turn redrawing on or off |
-| `/lens open [id]` | Open the latest mermaid diagrams (or the one with `id`) in your browser |
+| `/visualize` | Toggle redrawing on or off |
+| `/visualize on` / `/visualize off` | Turn redrawing on or off |
+| `/visualize open [id]` | Open the latest mermaid diagrams (or the one with `id`) in your browser |
 
 ## Development
 

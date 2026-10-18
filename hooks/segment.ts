@@ -1,4 +1,4 @@
-// A reply block split into the parts lens draws itself and the markdown around them.
+// A reply block split into the parts visualize draws itself and the markdown around them.
 
 import { parseChain, type Chain } from './flow'
 import { isTableStart, parseTable, type Table } from './table'
