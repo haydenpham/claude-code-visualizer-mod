@@ -29,3 +29,7 @@ claude --plugin-dir ./claude-code-visualizer-mod
 claude plugin validate .
 claude plugin test .
 ```
+
+## License
+
+[MIT](LICENSE)

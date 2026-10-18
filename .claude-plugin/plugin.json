@@ -6,5 +6,6 @@
     "name": "haydenpham"
   },
   "repository": "https://github.com/haydenpham/claude-code-visualizer-mod",
+  "license": "MIT",
   "types": "./types/index.d.ts"
 }
