@@ -1,0 +1,10 @@
+{
+  "name": "visualizer-mod",
+  "version": "0.1.0",
+  "description": "Readable tables, mermaid diagrams and arrow flows in Claude's terminal replies",
+  "author": {
+    "name": "haydenpham"
+  },
+  "repository": "https://github.com/haydenpham/claude-code-visualizer-mod",
+  "types": "./types/index.d.ts"
+}
